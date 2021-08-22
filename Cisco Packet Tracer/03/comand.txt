@@ -1,0 +1,68 @@
+Алгоритм действий:
+1. Подключаемся по консоли
+2. Задаем пароль на привилегированный режим (enable)
+3. Создаем пользователя
+4. Устанавливаем авторизацию на подключение к консоли
+5. Задаем IP-адрес устройства
+6. Выбираем тип удаленного подключения (Telnet/SSH)
+7. Включаем авторизацию для удаленных подключений
+
+
+show run -- конфигурация камутатора
+
+1. Для настройки глобальной конфигурации заходим в режим (config)
+
+configure terminal -- режим конфигурации 
+
+2. Задаем пароль:
+  enable pasword cisco -- где cisco  пароль
+
+3. В (config) режиме задаем настройку для шифровки пароля 
+  service password-encryption
+
+4. Второй способ настройки пароля в (config) режиме
+  enable secret cisco2 -- где cisco2 это пароль
+  do show run -- проверим пароль
+
+
+1. Задаем привилегии
+   username ?
+   username admin ? 
+   username admin privilege 15 ?
+   username admin privilege 15 password ?
+   username admin privilege 15 password cisco -- где cisco это пароль cisco
+   
+2. Конфигурирование терминальных линий  для входа через авторизацию
+   line ?
+   line console ?
+   line console 0
+   login ?
+   login local 
+
+
+1. Настройка IP 
+   conf t -- в режим (config)
+   interface Vlan1 -- настройка интерфейса
+   ?
+   ip address 192.168.0.1 255.255.255.0
+   no shutdown --поднимаем 
+   exit
+2. Настроим виртуальные терминальные линии
+   line ?
+   line vty ?
+   line vty 0 4
+   ?
+   transport input ? -- определяем протокол
+   transport input telent 
+   login ?
+   login local
+   end
+   write memory
+
+Подключаемся по Ethernet 
+ping 192.168.0.1 
+telnet 192.168.0.1 -- подключаемся 
+
+/------------------------Lesson2------------------------------/
+
+
