@@ -1,0 +1,130 @@
+Алгоритм действий:
+1. Подключаемся по консоли
+2. Задаем пароль на привилегированный режим (enable)
+3. Создаем пользователя
+4. Устанавливаем авторизацию на подключение к консоли
+5. Задаем IP-адрес устройства
+6. Выбираем тип удаленного подключения (Telnet/SSH)
+7. Включаем авторизацию для удаленных подключений
+
+
+show run -- конфигурация камутатора
+
+1. Для настройки глобальной конфигурации заходим в режим (config)
+
+configure terminal -- режим конфигурации 
+
+2. Задаем пароль:
+  enable pasword cisco -- где cisco  пароль
+
+3. В (config) режиме задаем настройку для шифровки пароля 
+  service password-encryption
+
+4. Второй способ настройки пароля в (config) режиме
+  enable secret cisco2 -- где cisco2 это пароль
+  do show run -- проверим пароль
+
+
+1. Задаем привилегии
+   username ?
+   username admin ? 
+   username admin privilege 15 ?
+   username admin privilege 15 password ?
+   username admin privilege 15 password cisco -- где cisco это пароль cisco
+   
+2. Конфигурирование терминальных линий  для входа через авторизацию
+   line ?
+   line console ?
+   line console 0
+   login ?
+   login local 
+
+
+1. Настройка IP 
+   conf t -- в режим (config)
+   interface Vlan1 -- настройка интерфейса
+   ?
+   ip address 192.168.0.1 255.255.255.0
+   no shutdown --поднимаем 
+   exit
+2. Настроим виртуальные терминальные линии
+   line ?
+   line vty ?
+   line vty 0 4
+   ?
+   transport input ? -- определяем протокол
+   transport input telent 
+   login ?
+   login local
+   end
+   write memory
+
+Подключаемся по Ethernet 
+ping 192.168.0.1 
+telnet 192.168.0.1 -- подключаемся 
+
+/------------------------Lesson2------------------------------/
+
+1. Настроим Vlan 2
+   enable -- заходим в привилигировочный режим
+   conf t
+   vlan 2
+   name buh
+   exit
+   interfaces fastEthernet 0/1 -- определяем групы vlan
+   switchport mode access -- определяем порт в режиме Access port
+   switchport access vlan 2
+   exit
+2. Настраиваем FastEthernet другого компьютера
+   int fa0/2
+   switchport mode access 
+   switchport access vlan 2
+   end
+
+3. Проверить работу vlan
+   show vlan
+   show vlan brief
+
+4. Настроим Vlan 3
+   vlan
+   conf t
+   vlan 3
+   name users 
+   exit
+   interface fa0/3
+   switchport mode access
+   switchport access vlan 3
+   exit
+
+   interface fa 0/4
+   switchport mode access
+   switchport access vlan3
+   end
+   vlan brief
+
+5. Настройка vlan на двух камутаторов 
+   en4
+   en
+   show run
+   Настройка Trunk Port
+6. Коммутатор первый
+   conf t
+   interface gigabitEthernet 0/1
+   switchport mode trunk
+   switchport trunk allowed vlan 2,3 
+   exit
+7. Коммутатор второй
+   conf t
+   interface gigabiteEthernet 0/1
+   switchport mode trunk
+   switchport trunk allowed vlan 2,3
+   end
+   wr mem
+   write  
+8. Исключение одного vlan
+   conf t 
+   interface gi1/1
+   switchport trunk allowed vlan 2
+   exit
+   wr mem
+
