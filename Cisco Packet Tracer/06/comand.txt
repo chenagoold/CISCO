@@ -143,6 +143,8 @@ spanning-tree mode rapid-pvst -- делаем на двух коммутатор
 interface fastEthernet 0/1
 no shutdown --поднимим link
 
+/------------------------Lesson6------------------------------/
+
 
 
 
