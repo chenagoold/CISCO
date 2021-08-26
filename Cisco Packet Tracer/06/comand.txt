@@ -144,7 +144,56 @@ interface fastEthernet 0/1
 no shutdown --поднимим link
 
 /------------------------Lesson6------------------------------/
+1. Настройка на первом коммутаторе агрегированый интерфейс
+enable
+interface range fa0/1-2
+channel-group 1 mode ?
+channel-group 1 mode on
+end
+write memory
 
+2. Настройка на другом коммутаторе
+enable
+interface range fa0/1-2
+channel-group 1 mode ?
+channel-group 1 mode on
+end
+write memory
 
+3. Потушим один link
+enable
+conf t
+int fa 0/2
+shutdown
+
+4.Настройка динамического агрегирования 3560
+enable
+conf t
+int range fa0/1-2
+channel-protocol ?
+channel-protocol lacp
+channel-group 1 mode active
+exit
+int range fa0/3-4
+channel-protocol lacp
+channel-group 2 mode active
+exit
+
+int range fa0/5-6
+channel-protocol lacp
+channel-group 2 mode active
+exit
+write memory
+5. Настройка коммутаторов 2960
+enable
+conf t
+int range fastEthernet 0/1-2
+channel-protocol lacp
+channel-group 1 mode passive
+end
+write memory
+
+6. Посмотреть агрегированый порт
+show etherchannel summary
 
 
